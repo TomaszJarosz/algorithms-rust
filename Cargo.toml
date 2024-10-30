@@ -1,6 +1,4 @@
-[package]
+[workspace]
 name = "algorithms-rust"
-version = "0.1.0"
-edition = "2021"
 
-[dependencies]
+members = ["two-pointers"]
