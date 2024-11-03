@@ -15,7 +15,10 @@ pub fn is_palindromic(array: &[i32]) -> bool {
 pub fn is_palindromic_iter(array: &[i32]) -> bool {
     array.iter().eq(array.iter().rev())
 }
-
+/// Given a sorted array of unique integers and a target integer,
+/// return true if there exists a pair of numbers that sum to target, false otherwise.
+/// This problem is similar to Two Sum. (In Two Sum, the input is not sorted).
+/// For example, given nums = [1, 2, 4, 6, 8, 9, 14, 15] and target = 13, return true because 4 + 9 = 13.
 pub fn two_sum_sorted(sorted_array: &[i32], sum: i32) -> Option<(usize, usize)> {
     let mut left = 0;
     let mut right = sorted_array.len().saturating_sub(1);
