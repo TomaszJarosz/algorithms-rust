@@ -15,9 +15,25 @@ pub fn is_palindromic_string_iters(string: &str) -> bool {
     let chars: Vec<char> = string.chars().collect();
     chars.iter().eq(chars.iter().rev())
 }
+
+pub fn is_subsequence(s: &str, t: &str) -> bool {
+    let (mut i, mut j) = (0, 0);
+    let chars_s: Vec<char> = s.chars().collect();
+    let chars_t: Vec<char> = t.chars().collect();
+
+    while j < chars_t.len() {
+        if i < chars_s.len() && chars_s[i] == chars_t[j] {
+            i += 1;
+        }
+        j += 1;
+    }
+
+    i == chars_s.len()
+}
+
 #[cfg(test)]
 mod tests {
-    use crate::algos::string::{is_palindromic, is_palindromic_string_iters};
+    use crate::algos::string::{is_palindromic, is_palindromic_string_iters, is_subsequence};
 
     #[test]
     fn test_palindromic_string() {
@@ -39,5 +55,23 @@ mod tests {
         assert!(!is_palindromic_string_iters("greeting"));
         assert!(!is_palindromic_string_iters("aabCCbbaa"));
         assert!(!is_palindromic_string_iters("aAaAaAaAaA"));
+    }
+
+    #[test]
+    fn test_is_subsequence() {
+        assert_eq!(is_subsequence("ace", "abcde"), true);
+        assert_eq!(is_subsequence("", "abcde"), true);
+        assert_eq!(is_subsequence("abc", "abc"), true);
+        assert_eq!(is_subsequence("aaa", "aabbaaa"), true);
+        assert_eq!(is_subsequence("a", "a"), true);
+        assert_eq!(is_subsequence("abc", "aabbcc"), true);
+    }
+
+    #[test]
+    fn test_is_not_subsequence() {
+        assert_eq!(is_subsequence("aec", "abcde"), false);
+        assert_eq!(is_subsequence("abc", ""), false);
+        assert_eq!(is_subsequence("abcdef", "abc"), false);
+        assert_eq!(is_subsequence("a", "b"), false);
     }
 }
