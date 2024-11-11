@@ -31,9 +31,19 @@ pub fn is_subsequence(s: &str, t: &str) -> bool {
     i == chars_s.len()
 }
 
+pub fn reverse_string(s: &mut Vec<char>) {
+    let mut left = 0;
+    let mut right = s.len().saturating_sub(1);
+    while left < right {
+        s.swap(left, right);
+        left += 1;
+        right -= 1;
+    }
+}
+
 #[cfg(test)]
 mod tests {
-    use crate::algos::string::{is_palindromic, is_palindromic_string_iters, is_subsequence};
+    use crate::algos::string::{is_palindromic, is_palindromic_string_iters, is_subsequence, reverse_string};
 
     #[test]
     fn test_palindromic_string() {
@@ -73,5 +83,19 @@ mod tests {
         assert_eq!(is_subsequence("abc", ""), false);
         assert_eq!(is_subsequence("abcdef", "abc"), false);
         assert_eq!(is_subsequence("a", "b"), false);
+    }
+
+    #[test]
+    fn test_reverse_string_example1() {
+        let mut s = vec!['h', 'e', 'l', 'l', 'o'];
+        reverse_string(&mut s);
+        assert_eq!(s, vec!['o', 'l', 'l', 'e', 'h']);
+    }
+
+    #[test]
+    fn test_reverse_string_example2() {
+        let mut s = vec!['H', 'a', 'n', 'n', 'a', 'h'];
+        reverse_string(&mut s);
+        assert_eq!(s, vec!['h', 'a', 'n', 'n', 'a', 'H']);
     }
 }
