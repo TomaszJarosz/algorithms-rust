@@ -64,15 +64,56 @@ fn merge_sorted_arrays(arr1: &[i32], arr2: &[i32]) -> Vec<i32> {
 
     result
 }
+/// Given an integer array `nums` sorted in non-decreasing order, returns an array of the squares of each number, sorted in non-decreasing order.
+///
+/// // Example 1
+/// let nums = vec![-4, -1, 0, 3, 10];
+/// let result = sorted_squares(nums);
+/// assert_eq!(result, vec![0, 1, 9, 16, 100]);
+/// // Explanation: After squaring, the array becomes [16, 1, 0, 9, 100].
+/// // After sorting, it becomes [0, 1, 9, 16, 100].
+/// # Approach
+///
+/// The function uses a two-pointer technique:
+/// - `left` starts from the beginning of `nums`, and `right` starts from the end.
+/// - In each step, the squares of `nums[left]` and `nums[right]` are compared.
+/// - The larger square is placed at the end of the `result` array, which is filled from back to front to maintain non-decreasing order.
+///
+/// This approach is efficient with a time complexity of O(n), where n is the length of `nums`.
+///
+
+pub fn sorted_squares(nums: Vec<i32>) -> Vec<i32> {
+    let mut result = vec![0; nums.len()];
+    let (mut left, mut right) = (0, nums.len() - 1);
+    let mut pos = nums.len() - 1;
+
+    while left <= right {
+        let left_square = nums[left] * nums[left];
+        let right_square = nums[right] * nums[right];
+
+        if left_square > right_square {
+            result[pos] = left_square;
+            left += 1;
+        } else {
+            result[pos] = right_square;
+            if right > 0 {
+                right -= 1;
+            } else {
+                break;
+            }
+        }
+
+        if pos > 0 {
+            pos -= 1;
+        }
+    }
+
+    result
+}
 
 #[cfg(test)]
 mod tests {
-    use crate::algos::array::{
-        is_palindromic,
-        is_palindromic_iter,
-        merge_sorted_arrays,
-        two_sum_sorted
-    };
+    use crate::algos::array::{is_palindromic, is_palindromic_iter, merge_sorted_arrays, sorted_squares, two_sum_sorted};
 
     #[test]
     fn test_palindromic_array() {
@@ -144,5 +185,19 @@ mod tests {
         let arr2 = [2];
         let result = merge_sorted_arrays(&arr1, &arr2);
         assert_eq!(result, vec![1, 2]);
+    }
+
+    #[test]
+    fn test_sorted_squares_example1() {
+        let nums = vec![-4, -1, 0, 3, 10];
+        let result = sorted_squares(nums);
+        assert_eq!(result, vec![0, 1, 9, 16, 100]);
+    }
+
+    #[test]
+    fn test_sorted_squares_example2() {
+        let nums = vec![-7, -3, 2, 3, 11];
+        let result = sorted_squares(nums);
+        assert_eq!(result, vec![4, 9, 9, 49, 121]);
     }
 }
