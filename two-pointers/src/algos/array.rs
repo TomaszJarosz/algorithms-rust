@@ -129,6 +129,38 @@ pub fn sorted_squares(nums: Vec<i32>) -> Vec<i32> {
     result
 }
 
+/// Finds the maximum average value of any contiguous subarray of length `k` in the given array `nums`.
+///
+/// # Parameters:
+/// - `nums`: A vector of integers representing the input array.
+/// - `k`: An integer representing the length of the contiguous subarray.
+///
+/// # Returns:
+/// - The maximum average value as a floating-point number (`f64`).
+///
+/// # Constraints:
+/// - `1 <= k <= nums.len()`
+/// - `-10^4 <= nums[i] <= 10^4`
+///
+/// # Example:
+/// ```
+/// let nums = vec![1, 12, -5, -6, 50, 3];
+/// let k = 4;
+/// let result = find_max_average(nums, k);
+/// assert!((result - 12.75000).abs() < 1e-5);
+/// ```
+pub fn find_max_average(nums: Vec<i32>, k: i32) -> f64 {
+    let k = k as usize;
+    let mut window_sum: i32 = nums.iter().take(k).sum();
+    let mut max_sum = window_sum;
+
+    for i in k..nums.len() {
+        window_sum += nums[i] - nums[i - k];
+        max_sum = max_sum.max(window_sum);
+    }
+    max_sum as f64 / k as f64
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -181,5 +213,18 @@ mod tests {
     fn test_sorted_squares_example2() {
         let nums = vec![-7, -3, 2, 3, 11];
         assert_eq!(sorted_squares(nums), vec![4, 9, 9, 49, 121]);
+    }
+
+    #[cfg(test)]
+    mod tests {
+        use super::*;
+
+        #[test]
+        fn test_find_max_average() {
+            assert!((find_max_average(vec![1, 12, -5, -6, 50, 3], 4) - 12.75000).abs() < 1e-5);
+            assert!((find_max_average(vec![5], 1) - 5.00000).abs() < 1e-5);
+            assert!((find_max_average(vec![-1, -2, -3, -4], 2) - -1.5).abs() < 1e-5);
+            assert!((find_max_average(vec![0, 4, 0, 3, 2], 3) - 2.33333).abs() < 1e-5);
+        }
     }
 }
