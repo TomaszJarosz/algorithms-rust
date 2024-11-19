@@ -200,6 +200,31 @@ pub fn longest_ones(nums: Vec<i32>, k: i32) -> i32 {
     max_length as i32
 }
 
+/// Computes the running sum of an array.
+///
+/// # Parameters:
+/// - `nums`: A vector of integers.
+///
+/// # Returns:
+/// - A vector of integers where each element at index `i` is the sum of elements from `nums[0]` to `nums[i]`.
+///
+/// # Example:
+/// ```
+/// let nums = vec![1, 2, 3, 4];
+/// let result = running_sum(nums);
+/// assert_eq!(result, vec![1, 3, 6, 10]);
+/// ```
+pub fn running_sum(nums: Vec<i32>) -> Vec<i32> {
+    let mut running_sum = vec![0; nums.len()];
+
+    running_sum[0] = nums[0];
+    for i in 1..nums.len() {
+        running_sum[i] = running_sum[i - 1] + nums[i];
+    }
+
+    running_sum
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -272,4 +297,11 @@ mod tests {
         assert_eq!(longest_ones(vec![1, 0, 1, 0, 1], 1), 3);
     }
 
+    #[test]
+    fn test_running_sum() {
+        assert_eq!(running_sum(vec![1, 2, 3, 4]), vec![1, 3, 6, 10]);
+        assert_eq!(running_sum(vec![1, 1, 1, 1, 1]), vec![1, 2, 3, 4, 5]);
+        assert_eq!(running_sum(vec![3, 1, 2, 10, 1]), vec![3, 4, 6, 16, 17]);
+        assert_eq!(running_sum(vec![5]), vec![5]);
+    }
 }
