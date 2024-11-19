@@ -161,8 +161,48 @@ pub fn find_max_average(nums: Vec<i32>, k: i32) -> f64 {
     max_sum as f64 / k as f64
 }
 
+/// Returns the maximum number of consecutive 1's in the array
+/// if at most `k` zeros can be flipped.
+///
+/// # Parameters:
+/// - `nums`: A binary array (vector of 0s and 1s).
+/// - `k`: An integer representing the maximum number of flips allowed.
+///
+/// # Returns:
+/// - An integer representing the maximum number of consecutive 1's.
+///
+/// # Example:
+/// ```
+/// let nums = vec![1,1,1,0,0,0,1,1,1,1,0];
+/// let k = 2;
+/// assert_eq!(longest_ones(nums, k), 6);
+/// ```
+pub fn longest_ones(nums: Vec<i32>, k: i32) -> i32 {
+    let mut left = 0;
+    let mut zeros_count = 0;
+    let mut max_length = 0;
+
+    for right in 0..nums.len() {
+        if nums[right] == 0 {
+            zeros_count += 1;
+        }
+
+        while zeros_count > k {
+            if nums[left] == 0 {
+                zeros_count -= 1;
+            }
+            left += 1;
+        }
+
+        max_length = max_length.max(right - left + 1);
+    }
+
+    max_length as i32
+}
+
 #[cfg(test)]
 mod tests {
+    use super::*;
     use super::*;
 
     #[test]
@@ -215,16 +255,21 @@ mod tests {
         assert_eq!(sorted_squares(nums), vec![4, 9, 9, 49, 121]);
     }
 
-    #[cfg(test)]
-    mod tests {
-        use super::*;
-
-        #[test]
-        fn test_find_max_average() {
-            assert!((find_max_average(vec![1, 12, -5, -6, 50, 3], 4) - 12.75000).abs() < 1e-5);
-            assert!((find_max_average(vec![5], 1) - 5.00000).abs() < 1e-5);
-            assert!((find_max_average(vec![-1, -2, -3, -4], 2) - -1.5).abs() < 1e-5);
-            assert!((find_max_average(vec![0, 4, 0, 3, 2], 3) - 2.33333).abs() < 1e-5);
-        }
+    #[test]
+    fn test_find_max_average() {
+        assert!((find_max_average(vec![1, 12, -5, -6, 50, 3], 4) - 12.75000).abs() < 1e-5);
+        assert!((find_max_average(vec![5], 1) - 5.00000).abs() < 1e-5);
+        assert!((find_max_average(vec![-1, -2, -3, -4], 2) - -1.5).abs() < 1e-5);
+        assert!((find_max_average(vec![0, 4, 0, 3, 2], 3) - 2.33333).abs() < 1e-5);
     }
+
+    #[test]
+    fn test_longest_ones() {
+        assert_eq!(longest_ones(vec![1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 0], 2), 6);
+        assert_eq!(longest_ones(vec![0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1], 3), 10);
+        assert_eq!(longest_ones(vec![1, 1, 1, 1], 0), 4);
+        assert_eq!(longest_ones(vec![0, 0, 0, 0], 2), 2);
+        assert_eq!(longest_ones(vec![1, 0, 1, 0, 1], 1), 3);
+    }
+
 }
