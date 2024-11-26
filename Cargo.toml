@@ -1,4 +1,4 @@
 [workspace]
 name = "algorithms-rust"
 
-members = ["two-pointers"]
+members = ["two-pointers", "trees"]
