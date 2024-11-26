@@ -38,6 +38,16 @@ impl BinaryTree {
         }
         println!("{}", self.val)
     }
+
+    pub fn collect_in_order(&self, values: &mut Vec<i32>) {
+        if let Some(left) = &self.left {
+            left.collect_in_order(values)
+        }
+        values.push(self.val);
+        if let Some(right) = &self.right {
+            right.collect_in_order(values)
+        }
+    }
 }
 
 #[cfg(test)]
@@ -92,27 +102,16 @@ mod tests {
     }
 
     #[test]
-    fn test_in_order_traversal() {
+    fn test_collect_in_order() {
         let mut tree = BinaryTree::new(10);
         tree.insert(5);
         tree.insert(15);
         tree.insert(3);
         tree.insert(7);
 
-        // Zbieramy wynik in-order traversal do wektora
         let mut result = Vec::new();
-        fn collect_in_order(tree: &BinaryTree, result: &mut Vec<i32>) {
-            if let Some(left) = &tree.left {
-                collect_in_order(left, result);
-            }
-            result.push(tree.val);
-            if let Some(right) = &tree.right {
-                collect_in_order(right, result);
-            }
-        }
-        collect_in_order(&tree, &mut result);
+        tree.collect_in_order(&mut result);
 
-        // Sprawdzamy, czy wynik jest posortowany
         assert_eq!(result, vec![3, 5, 7, 10, 15]);
     }
 }
