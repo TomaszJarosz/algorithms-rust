@@ -28,18 +28,21 @@ impl BinaryTree {
             }
         }
     }
-}
 
-pub fn print_depth_first_search(node: Option<&BinaryTree>) {
-    if let Some(node) = node {
-        print_depth_first_search(node.left.as_deref());
-        print_depth_first_search(node.right.as_deref());
-        println!("{}", node.val)
+    pub fn print_depth_first_search(&self) {
+        if let Some(left) = &self.left {
+            left.print_depth_first_search()
+        }
+        if let Some(right) = &self.right {
+            right.print_depth_first_search()
+        }
+        println!("{}", self.val)
     }
 }
+
 #[cfg(test)]
 mod tests {
-    use crate::data_structures::binary_tree::{BinaryTree, print_depth_first_search};
+    use crate::data_structures::binary_tree::BinaryTree;
 
     #[test]
     fn test_new_tree() {
@@ -77,7 +80,7 @@ mod tests {
         tree.insert(12);
         tree.insert(20);
 
-        print_depth_first_search(Some(&tree));
+        tree.print_depth_first_search();
 
         assert_eq!(tree.val, 10);
         assert_eq!(tree.left.as_ref().unwrap().val, 5);
